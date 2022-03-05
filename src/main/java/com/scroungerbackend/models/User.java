@@ -1,21 +1,30 @@
 package com.scroungerbackend.models;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.*;
+import org.hibernate.Hibernate;
+
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users", 
     uniqueConstraints = { 
-      @UniqueConstraint(columnNames = "username"),
-      @UniqueConstraint(columnNames = "email") 
+      @UniqueConstraint(columnNames = "userName"),
+      @UniqueConstraint(columnNames = "userEmail")
     })
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Long userId;
 
   @NotBlank
   @Size(max = 20)
@@ -24,64 +33,35 @@ public class User {
   @NotBlank
   @Size(max = 50)
   @Email
-  private String email;
+  private String userEmail;
 
   @NotBlank
   @Size(max = 120)
-  private String password;
+  private String userPassword;
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(  name = "user_roles", 
         joinColumns = @JoinColumn(name = "user_id"), 
         inverseJoinColumns = @JoinColumn(name = "role_id"))
+  @ToString.Exclude
   private Set<Role> roles = new HashSet<>();
 
-  public User() {
-  }
-
-  public User(String username, String email, String password) {
+  public User(String username, String userEmail, String userPassword) {
     this.username = username;
-    this.email = email;
-    this.password = password;
+    this.userEmail = userEmail;
+    this.userPassword = userPassword;
   }
 
-  public Long getId() {
-    return id;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+    User user = (User) o;
+    return userId != null && Objects.equals(userId, user.userId);
   }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  public Set<Role> getRoles() {
-    return roles;
-  }
-
-  public void setRoles(Set<Role> roles) {
-    this.roles = roles;
+  @Override
+  public int hashCode() {
+    return getClass().hashCode();
   }
 }
