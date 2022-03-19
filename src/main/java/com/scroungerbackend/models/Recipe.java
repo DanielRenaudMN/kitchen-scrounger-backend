@@ -6,6 +6,7 @@ import org.hibernate.Hibernate;
 
 import java.sql.Clob;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "recipes")
@@ -38,10 +39,14 @@ public class Recipe {
     @Lob
     private Clob recipeInstructions;
 
+    @ManyToMany(mappedBy = "userRecipes")
+    private Set<User> users;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
+            return false;
         Recipe recipe = (Recipe) o;
         return recipeId != null && Objects.equals(recipeId, recipe.recipeId);
     }
