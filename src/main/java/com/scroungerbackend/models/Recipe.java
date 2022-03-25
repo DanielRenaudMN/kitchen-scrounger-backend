@@ -1,58 +1,68 @@
 package com.scroungerbackend.models;
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.Hibernate;
-
-import java.sql.Clob;
-import java.util.Objects;
-import java.util.Set;
-
-@Entity
-@Table(name = "recipes")
-@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor
 public class Recipe {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long recipeId;
 
-    private String recipeName;
+    private Long id;
+    private String title;
+    private String image;
+    private int usedIngredientCount;
+    private int missedIngredientCount;
+    private int likes;
 
-    private String sourceName;
-
-    private String sourceUrl;
-
-    private String imageUrl;
-
-    private String imageType;
-
-    private int recipeLikes;
-
-    private int minutesRequired;
-
-    @Lob
-    private Clob recipeSummary;
-
-    @Lob
-    private Clob recipeInstructions;
-
-    @ManyToMany(mappedBy = "userRecipes")
-    private Set<User> users;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
-            return false;
-        Recipe recipe = (Recipe) o;
-        return recipeId != null && Objects.equals(recipeId, recipe.recipeId);
+    public Recipe(Long id, String title, String image, int usedIngredientCount, int missedIngredientCount, int likes) {
+        this.id = id;
+        this.title = title;
+        this.image = image;
+        this.usedIngredientCount = usedIngredientCount;
+        this.missedIngredientCount = missedIngredientCount;
+        this.likes = likes;
     }
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public int getUsedIngredientCount() {
+        return usedIngredientCount;
+    }
+
+    public void setUsedIngredientCount(int usedIngredientCount) {
+        this.usedIngredientCount = usedIngredientCount;
+    }
+
+    public int getMissedIngredientCount() {
+        return missedIngredientCount;
+    }
+
+    public void setMissedIngredientCount(int missedIngredientCount) {
+        this.missedIngredientCount = missedIngredientCount;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
     }
 }
